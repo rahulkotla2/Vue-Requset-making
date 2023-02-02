@@ -30,6 +30,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
   data() {
     return {
@@ -45,19 +46,31 @@ export default {
         return;
       }
       this.invalidInput = false;
-
-      fetch('https://vue-request-making-default-rtdb.firebaseio.com/surveys.json', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application.json'
-        },
-        body: JSON.stringify({
-          name: this.enteredName,
-          rating: this.chosenRating
-        }),
+      axios.post('https://vue-request-making-default-rtdb.firebaseio.com/surveys.json', {
+        name: this.enteredName,
+        rating: this.chosenRating,
       })
-      this.enteredName = '';
-      this.chosenRating = null;
+      //   fetch('https://vue-request-making-default-rtdb.firebaseio.com/surveys.json', {
+      //     method: 'POST',
+      //     headers: {
+      //       'Content-Type': 'application.json'
+      //     },
+      //     body: JSON.stringify({
+      //       name: this.enteredName,
+      //       rating: this.chosenRating
+      //     }),
+      //   }).then(response => {
+      //     if (response.ok) {
+      //       //...
+      //     } else {
+      //       throw new Error('Could not Save Data!');
+      //     }
+      //   })
+      //     .catch(error => {
+      //       console.log(error.message);
+      //     })
+      //   this.enteredName = '';
+      //   this.chosenRating = null;
     },
   },
 };
