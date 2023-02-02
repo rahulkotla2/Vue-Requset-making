@@ -3,15 +3,12 @@
     <base-card>
       <h2>Submitted Experiences</h2>
       <div>
-        <base-button>Load Submitted Experiences</base-button>
+        <base-button @click="LoadDBdata">Load Submitted Experiences</base-button>
       </div>
-      <ul>
-        <survey-result
-          v-for="result in results"
-          :key="result.id"
-          :name="result.name"
-          :rating="result.rating"
-        ></survey-result>
+      <p v-if="isLoading">Loading...</p>
+      <ul v-else>
+        <survey-result v-for="result in results" :key="result.id" :name="result.name"
+          :rating="result.rating"></survey-result>
       </ul>
     </base-card>
   </section>
@@ -21,10 +18,44 @@
 import SurveyResult from './SurveyResult.vue';
 
 export default {
-  props: ['results'],
   components: {
     SurveyResult,
   },
+  data() {
+    return {
+      results: [],
+      isLoading: false,
+    }
+  },
+  methods: {
+    LoadDBdata() {
+      this.isLoading = true;
+      fetch('https://vue-request-making-default-rtdb.firebaseio.com/surveys.json')
+        .then(response => {
+          if (response.ok) {
+            return response.json()
+          }
+        })
+        .then(data => {
+          this.isLoading = false;
+          const results = [];
+          for (const id in data) {
+            results.push({
+              id: id,
+              name: data[id].name,
+              rating: data[id].rating
+            });
+          }
+          this.results = results;
+        })
+        .catch(error => {
+          console.log(error)
+        })
+    }
+  },
+  mounted() {
+    this.LoadDBdata();
+  }
 };
 </script>
 

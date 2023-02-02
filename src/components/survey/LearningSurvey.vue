@@ -38,7 +38,6 @@ export default {
       invalidInput: false,
     };
   },
-  emits: ['survey-submit'],
   methods: {
     submitSurvey() {
       if (this.enteredName === '' || !this.chosenRating) {
